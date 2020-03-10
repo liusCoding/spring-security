@@ -1,0 +1,7 @@
+#关闭
+spring:
+  session:
+    store-type: none
+security:
+  basic:
+    enabled: false
