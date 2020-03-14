@@ -8,8 +8,10 @@ import com.ls.security.demo.dto.UserQueryCondition;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -23,11 +25,11 @@ import java.util.stream.Stream;
 
 @RestController
 @Slf4j
-
+@RequestMapping("/user")
 public class UserController {
 
 
-    @GetMapping("/user")
+    @GetMapping
     @JsonView(User.UserSimpleView.class)
     public List<User> query(UserQueryCondition userQueryCondition, @PageableDefault Pageable pageable){
 
@@ -44,15 +46,43 @@ public class UserController {
      * @param id
      * @return: com.ls.security.demo.dto.User
      **/
-    @RequestMapping(value = "/user/{id:\\d+}",method = RequestMethod.GET)
-
-    @GetMapping("/user/{id:\\d+}")
+    @GetMapping("/{id:\\d+}")
     @JsonView(User.UserDetailView.class)
     public User getInfo(@PathVariable String id){
 
+     // throw new UserNotExistException(id);
+        log.info("进入getInfo服务");
         log.info("id:{}",id);
         User user = new User();
         user.setUsername("tom");
         return user;
+    }
+
+
+    @PostMapping
+    public User create(@Valid  @RequestBody  User user, BindingResult result){
+
+        if(result.hasErrors()){
+            result.getAllErrors().stream().forEach(e -> System.out.println(e.getDefaultMessage()));
+        }
+        user.setId("1");
+        log.info("【创建user】：{}",user);
+        return user;
+    }
+
+    @PutMapping("/{id}")
+    public User update(@Valid  @RequestBody  User user, BindingResult result,@PathVariable("id")String id){
+
+        if(result.hasErrors()){
+            result.getAllErrors().stream().forEach(e -> System.out.println(e.getDefaultMessage()));
+        }
+        user.setId("1");
+        log.info("【创建user】：{}",user);
+        return user;
+    }
+
+    @DeleteMapping("/{id}")
+    public void delete(@PathVariable String id){
+        log.info("【删除用户】id={}",id);
     }
 }

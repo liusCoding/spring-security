@@ -4,7 +4,7 @@
     <modelVersion>4.0.0</modelVersion>
     <parent>
         <groupId>com.ls.security</groupId>
-        <artifactId>ls-security</artifactId>
+        <artifactId>spring-security</artifactId>
         <version>${revision}</version>
         <relativePath>..</relativePath>
     </parent>
